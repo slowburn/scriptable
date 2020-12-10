@@ -1,3 +1,4 @@
+// reduced version - added wait for image to load
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: red; icon-glyph: calendar-alt;
@@ -80,7 +81,16 @@ if (!config.runsInWidget && !TEST_MODE) {
     widget.backgroundColor = BACKGROUND_COLOR
 //     console.log("imageName: "+imageName);
 
-    setWidgetBackground(widget, imageName);
+//     setWidgetBackground(widget, imageName);
+    
+    let fm = FileManager.iCloud();
+    let path = fm.documentsDirectory() + "/images/bg_gross2.png";
+     await fm.downloadFileFromiCloud(path);
+// Image.fromFile(path) can also be used
+
+  console.log("path: "+path);
+
+widget.backgroundImage = fm.readImage(path);
 
     // Add the top date
     DATE_FORMATTER.dateFormat = "EEEE dd.MMM"
@@ -193,16 +203,4 @@ function sameHour(d1, d2) {
         d1.getHours() === d2.getHours()
 }
 
-function getImageUrl(name) {
-  let fm = FileManager.iCloud();
-  let dir = fm.documentsDirectory()+'/images';
-//    console.log("dir: "+dir);
-
-  return fm.joinPath(dir, `${name}`);
-}
-
-
-function setWidgetBackground(widget, imageName) {
-  const imageUrl = getImageUrl(imageName);
-  widget.backgroundImage = Image.fromFile(imageUrl);
-}
+  
